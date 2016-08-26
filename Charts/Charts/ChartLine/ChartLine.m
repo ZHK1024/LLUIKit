@@ -22,7 +22,6 @@
     ChartLine *path = [ChartLine new];
     path.strokeColor = lineColor.CGColor;
     path.fillColor = [UIColor clearColor].CGColor;
-//    path.fillColor = lineColor.CGColor;
     path.lineWidth = 2;
     [path makePathWithPoints:points xSpace:space scale:scale areaHeight:areaHeight];
     
@@ -62,11 +61,7 @@
         [path addCurveToPoint:endPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         ep = endPoint;
     }
-    
-//    [path moveToPoint:CGPointMake(ep.x, height)];
-//    [path moveToPoint:CGPointMake(point.x, height)];
-//    [path moveToPoint:point];
-//    [path closePath];
+
     self.path = path.CGPath;
 }
 
@@ -93,9 +88,6 @@
         y = endPoint.y;
     }
     
-//    NSLog(@"%f    %f", x, y);
-//    NSLog(@"%f    %f", xOffset, yOffset);
-//    return CGPointMake(xOffset, yOffset);
     return CGPointMake(x, y);
 }
 

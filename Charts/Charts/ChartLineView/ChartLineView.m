@@ -48,7 +48,7 @@
     if (![self isColorCountEnough]) {
         return;
     }
-    
+
     [self formatDataPoint];
 
     if (_showPointCount == 0) {
@@ -120,65 +120,49 @@
             [self.xAreaTitle addObject:point.xValue];
         }
     }else {
-        NSArray *points1 = [self.data firstObject];
-        NSArray *points2 = [self.data lastObject];
-        
-        NSInteger index1 = 0;
-        NSInteger index2 = 0;
+        NSMutableArray *tempArray = [NSMutableArray new];
+        // 把所有数据的放进同一个数组
+        for (NSArray *array in _data) {
+            [tempArray addObjectsFromArray:array];
+        }
+        // 对数组进行排序
+        [tempArray sortUsingComparator:^NSComparisonResult(ChartPoint *obj1, ChartPoint *obj2) {
+            NSComparisonResult result = [obj1.xValue compare:obj2.xValue options:NSNumericSearch];
+            return result;
+        }];
+        [self setPointsAreaIndex:tempArray];
+    }
+}
 
-        for (NSInteger i = 0; ; ++i) {
-            ChartPoint *point1 = nil;
-            ChartPoint *point2 = nil;
-            if (index1 < points1.count) {
-                point1 = points1[index1];
+/*!
+ *  设置每个 point 的 areaIndex
+ *
+ *  @param tempArray point 的容器数组
+ */
+- (void)setPointsAreaIndex:(NSArray<ChartPoint *> *)tempArray {
+    //
+    NSInteger index = 0;
+    for (NSInteger i = 0; i < tempArray.count; i++) {
+        if (i == 0) {
+            ChartPoint *p = tempArray[i];
+            [self.xAreaTitle addObject:p.xValue];
+            [p setIndex:index];
+        }else {
+            ChartPoint *p1 = tempArray[i - 1];
+            ChartPoint *p2 = tempArray[i];
+            if ([p2.xValue isEqualToString:p1.xValue]) {
+                [p2 setIndex:p1.areaIndex];
+                
             }else {
-                point1 = nil;
-            }
-            if (index2 < points2.count) {
-                point2 = points2[index2];
-            }else {
-                point2 = nil;
-            }
-            
-            if (!point1 && point2) {
-                [self.xAreaTitle addObject:point2.xValue];
-                [point2 setIndex:i];
-                index2++;
-                continue;
-            }else if (!point2 && point1) {
-                [self.xAreaTitle addObject:point1.xValue];
-                [point1 setIndex:i];
-                index1++;
-                continue;
-            }else if (!point1 && !point2) {
-                return;
-            }
-            
-            
-            switch ([point1.xValue compare:point2.xValue]) {
-                case NSOrderedAscending:
-                    index1++;
-                    [point1 setIndex:i];
-                    [self.xAreaTitle addObject:point1.xValue];
-                    break;
-                case NSOrderedDescending:
-                    index2++;
-                    [point2 setIndex:i];
-                    [self.xAreaTitle addObject:point2.xValue];
-                    break;
-                case NSOrderedSame:
-                    index1++;
-                    index2++;
-                    [point1 setIndex:i];
-                    [point2 setIndex:i];
-                    [self.xAreaTitle addObject:point1.xValue];
-                    break;
-                default:
-                    break;
+                index++;
+                [p2 setIndex:index];
+                [self.xAreaTitle addObject:p2.xValue];
             }
         }
     }
 }
+
+#pragma mark -
 
 /*!
  *  生成折线路径
