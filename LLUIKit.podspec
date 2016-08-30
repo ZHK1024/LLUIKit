@@ -18,23 +18,30 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+ 自用的 UI 组件库.
                        DESC
 
   s.homepage         = 'https://github.com/ZHK1024/LLUIKit'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'ruris' => 'ruris@qq.com' }
-  s.source           = { :git => 'https://github.com/ruris/LLUIKit.git', :tag => s.version.to_s }
+  s.author           = { 'ruris' => 'ZHK1024@fixmail.com' }
+  s.source           = { :git => 'https://github.com/ZHK1024/LLUIKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '9.0'
-
+  s.ios.deployment_target = ' 11.0'
+  
+  s.swift_version = '5.0'
+  
   s.source_files = 'LLUIKit/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'LLUIKit' => ['LLUIKit/Assets/*.png']
-  # }
+  
+  s.subspec 'LLAboutViewController' do |ab|
+      ab.source_files = 'LLUIKit/Classes/UIComponents/LLAboutViewController/**/*.{h,m}'
+  end
+  
+  s.subspec 'LLSMSCodeViewController' do |sms|
+      sms.source_files = 'LLUIKit/Classes/UIComponents/LLSMSCodeViewController/**/*'
+  end
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
